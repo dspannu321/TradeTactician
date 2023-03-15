@@ -1,0 +1,2 @@
+# TradeTactician
+Stock portfolio manager
