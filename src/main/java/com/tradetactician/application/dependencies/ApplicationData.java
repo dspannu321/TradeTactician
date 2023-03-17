@@ -28,7 +28,7 @@ public class ApplicationData {
             Thread loadUsers = new Thread(()->{
                 try {
                     Statement statement = DatabaseConnection.establishDatabaseConnection();
-                    String sql = "SELECT * from user";
+                    String sql = "SELECT * FROM user";
                     ResultSet resultSet = statement.executeQuery(sql);
                     while (resultSet.next()){
                         user.add(new User(resultSet.getString(1),resultSet.getString(2),resultSet.getString(3),resultSet.getString(4),resultSet.getString(5),resultSet.getString(6)));

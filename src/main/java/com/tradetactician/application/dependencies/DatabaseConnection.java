@@ -14,9 +14,9 @@ public class DatabaseConnection {
 
 
     private static final String dbDriverClass="com.mysql.jdbc.Driver";
-    private static final String dbURL="jdbc:mysql://pannusoftech.com:3306/pannusof_tradetactician";
-    private static final String userName="pannusof_admin";
-    private static final String password="4L9zBA7Gh2qwRhD";
+    private static final String dbURL="dbURL";
+    private static final String userName="dbUserName";
+    private static final String password="dbPassword";
     private static boolean isConnectionActive=true;
 
     public static boolean isIsConnectionActive() {
