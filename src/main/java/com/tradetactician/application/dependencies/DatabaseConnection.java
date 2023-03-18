@@ -14,9 +14,9 @@ public class DatabaseConnection {
 
 
     private static final String dbDriverClass="com.mysql.jdbc.Driver";
-    private static final String dbURL="db_URL";
-    private static final String userName="userName";
-    private static final String password="password";
+    private static final String dbURL = CredentialsManager.getDatabaseURl();
+    private static final String userName = CredentialsManager.getDatabaseUserName();
+    private static final String password = CredentialsManager.getDatabasePassword();
     private static boolean isConnectionActive=true;
 
     public static boolean isIsConnectionActive() {

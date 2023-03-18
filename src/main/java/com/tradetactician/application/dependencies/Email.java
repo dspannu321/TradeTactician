@@ -13,10 +13,10 @@ import javax.mail.Transport;
 
 
 public class Email {
-    private static final String username = "user_name_email_address";
-    private static final String password = "password";
-    private static final String host = "host_server";
-    private static final int port = 000;
+    private static final String username = CredentialsManager.getEmailUserName();
+    private static final String password = CredentialsManager.getEmailPassword();
+    private static final String host = CredentialsManager.getEmailHostName();
+    private static final int port = CredentialsManager.getEmailPortNumber();
     private static String verificationCode;
 
 

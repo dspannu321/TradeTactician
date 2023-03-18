@@ -13,11 +13,11 @@ import java.util.concurrent.ThreadLocalRandom;
 public class MessageSender {
 
 
-    private static final VonageClient client = VonageClient.builder().apiKey("api_key").apiSecret("api_secret").build();
+    private static final VonageClient client = VonageClient.builder().apiKey(CredentialsManager.getVonageApiKey()).apiSecret(CredentialsManager.getVonageApiSecret()).build();
     private static String verificationCode;
 
     public static void sendMessage(String messageContent, String phoneNumber) {
-        TextMessage message = new TextMessage("vonage_number", "1"+phoneNumber, messageContent);
+        TextMessage message = new TextMessage(CredentialsManager.getVonageApiPhoneNo(), "1"+phoneNumber, messageContent);
 
         SmsSubmissionResponse response = client.getSmsClient().submitMessage(message);
 
