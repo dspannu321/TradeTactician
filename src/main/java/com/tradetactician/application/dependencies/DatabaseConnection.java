@@ -14,9 +14,9 @@ public class DatabaseConnection {
 
 
     private static final String dbDriverClass="com.mysql.jdbc.Driver";
-    private static final String dbURL="dbURL";
-    private static final String userName="dbUserName";
-    private static final String password="dbPassword";
+    private static final String dbURL="db_URL";
+    private static final String userName="userName";
+    private static final String password="password";
     private static boolean isConnectionActive=true;
 
     public static boolean isIsConnectionActive() {
@@ -38,7 +38,7 @@ public class DatabaseConnection {
             Platform.runLater(()->{
                 try{
                     DatabaseConnection.setIsConnectionActive(false);
-                    //alert.showWarning("Unable to Communicate with Database. Please check your Internet connection.");
+                    Alert.showWarning("Unable to Communicate with Database. Please check your Internet connection.");
 
                 }
                 catch (Exception ex){
@@ -61,7 +61,7 @@ public class DatabaseConnection {
             statement=connection.prepareStatement(sql);
         }
         catch(Exception e) {
-            //alert.showWarning("Error occurred while creating connection with Database Server.");
+            Alert.showWarning("Error occurred while creating connection with Database Server.");
             e.printStackTrace();
         }
         return statement;

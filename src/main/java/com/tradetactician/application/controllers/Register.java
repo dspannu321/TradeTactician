@@ -4,11 +4,10 @@ package com.tradetactician.application.controllers;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
-import com.tradetactician.application.dependencies.ApplicationData;
-import com.tradetactician.application.dependencies.DatabaseConnection;
-import com.tradetactician.application.dependencies.Hashing;
-import com.tradetactician.application.dependencies.ViewChanger;
+import com.tradetactician.application.dependencies.*;
+import com.tradetactician.application.dependencies.Alert;
 import com.tradetactician.application.logic.User;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
@@ -45,9 +44,24 @@ public class Register {
     @FXML
     private JFXButton submit;
 
+    private String OneTimePassword;
+
+    public String getOneTimePassword() {
+        return OneTimePassword;
+    }
+
+    public void setOneTimePassword(String oneTimePassword) {
+        OneTimePassword = oneTimePassword;
+    }
+
     @FXML
     void generateOTP(ActionEvent event) {
-
+        try{
+            setOneTimePassword(MessageSender.requestVerification(phoneNo.getText()));
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -57,22 +71,40 @@ public class Register {
         if (isRegisterFormFilled()){
             //verify if passwords match
             if (arePasswordsMatching()){
-                //verify if user existing already
-                if (isNotExistingUser()){
-                    if (addUserToDatabase()){
-                        ApplicationData.loadUsers();
+                if (otp.getText().equalsIgnoreCase(getOneTimePassword())) {//check if correct otp
+                    //verify if user existing already
+                    if (isNotExistingUser()) {
+                        if (addUserToDatabase()) {
+                            Platform.runLater(()->{
+                                try{
+                                    Alert.showSuccess("User Created Successfully. You can login now.");
+                                    ViewChanger.changeViewBackward(event,"login.fxml","TradeTactician - Login");
+                                }
+                                catch (Exception e){
+                                    e.printStackTrace();
+                                }
+                            });
+                        }
+                    } else {
+
+                        System.out.println("User Already Exists.");
+                        Alert.showMessage("User Already Exists.");
                     }
                 }
                 else {
-                    System.out.println("User Already Exists.");
+                    System.out.println("Invalid OTP. Try Again");
+                    Alert.showWarning("Invalid OTP. Try Again");
                 }
             }
             else {
                 System.out.println("Passwords doesn't Match.");
+                Alert.showWarning("Passwords doesn't Match.");
             }
         }
         else {
             System.out.println("Fields cannot be empty.");
+            Alert.showMessage("Fields cannot be empty.");
+
         }
 
     }
@@ -127,7 +159,8 @@ public class Register {
 
                     int rowAdded = preparedStatement.executeUpdate();
                     if (rowAdded == 1){
-                        System.out.println("User Created Successfully");
+                        System.out.println("User Created Successfully. You can login now.");
+                        ApplicationData.loadUsers();
                     }
                     else {
                         System.out.println("Something went Wrong");

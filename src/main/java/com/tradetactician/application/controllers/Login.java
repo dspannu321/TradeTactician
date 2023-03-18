@@ -4,6 +4,7 @@ package com.tradetactician.application.controllers;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
+import com.tradetactician.application.dependencies.Alert;
 import com.tradetactician.application.dependencies.ApplicationData;
 import com.tradetactician.application.dependencies.Hashing;
 import com.tradetactician.application.dependencies.ViewChanger;
@@ -31,20 +32,23 @@ public class Login implements Initializable {
             if (isAuthenticUser(userId.getText(),password.getText())){
                 try{
                     Login.setLoggedInUser(userId.getText());
-                    ViewChanger.changeViewForward(actionEvent,"dashboard.fxml","Dashboard - TradeTactician");
+                    ViewChanger.changeViewForward(actionEvent,"dashboard.fxml","TradeTactician - Dashboard");
                 }
                 catch (Exception e){
                     e.printStackTrace();
                 }
             }
             else {
+
                 System.out.println("Invalid Credentials. Try Again.");
+                Alert.showWarning("Invalid Credentials. Try Again.");
                 clear();// this clears the form so user can try to log in again
             }
 
         }
         else {
             System.out.println("UserID and password cannot be empty.");
+            Alert.showMessage("UserID and password cannot be empty.");
         }
 
     }
@@ -59,7 +63,26 @@ public class Login implements Initializable {
         }
     }
     //this will run when forgot password button will be clicked
-    @FXML private void forgotPassword(){}
+    @FXML private void forgotPassword(ActionEvent actionEvent){
+        if (!userId.getText().isEmpty()) {
+            if (isExistingUser()) {
+                try {
+                    ViewChanger.changeViewWithData(actionEvent, "forgotpassword.fxml", "setData", userId.getText(), "TradeTactician - Reset Password");
+                } catch (Exception e) {
+                    e.printStackTrace();
+
+                }
+            }
+            else {
+                System.out.println("Invalid User ID. No User Found.");
+                Alert.showWarning("Invalid User ID. No User Found.");
+            }
+        }
+        else {
+            System.out.println("Please enter User ID to reset Password.");
+            Alert.showMessage("Please enter User ID to reset Password.");
+        }
+    }
     //method to register. this will run when register will be clicked
     @FXML private void register(ActionEvent actionEvent){
         try{
@@ -100,6 +123,22 @@ public class Login implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         login.setDefaultButton(true);//this binds the login button with enter key
+    }
+
+    private boolean isExistingUser(){
+        boolean isExistingUser = false;
+        try{
+
+            for (User user: ApplicationData.getUser()){
+                if (user.getUserId().equalsIgnoreCase(userId.getText())){
+                    isExistingUser = true;
+                }
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return isExistingUser;
     }
 
 

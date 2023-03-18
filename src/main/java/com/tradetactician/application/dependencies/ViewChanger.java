@@ -145,10 +145,10 @@ public class ViewChanger {
         method.invoke(object, data);
         //=new Stage();
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        stage.initStyle(StageStyle.DECORATED);
+        //stage.initStyle(StageStyle.DECORATED);
 
         Scene scene = new Scene(parent);
-        scene.setFill(Color.TRANSPARENT);
+        //scene.setFill(Color.TRANSPARENT);
         stage.setScene(scene);
         stage.setMaximized(isMaximized);
         isMaximized = false;
